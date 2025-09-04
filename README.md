@@ -1,23 +1,23 @@
 # 📅 PlanHora
 
-**PlanHora** es una aplicación móvil desarrollada en **.NET MAUI**, orientada a la **gestión de turnos y horarios de empleados, pensada inicialmente para negocios de hostelería, pero adaptable a cualquier sector que requiera planificación horaria semanal del personal**.  
+**PlanHora** es una aplicación móvil desarrollada en **.NET MAUI**, orientada a la **gestión de turnos y horarios de empleados**, pensada inicialmente para negocios de hostelería, pero adaptable a cualquier sector que requiera planificación horaria semanal del personal.  
 
 ---
 
-## ✨ Funcionalidades previstas
+## Funcionalidades previstas
 
-- Gestión de **locales**.  
-- Gestión de **empleados**.  
-- Asignación de **horarios semanales**.  
+- Gestión de locales.  
+- Gestión de empleados.  
+- Asignación de horarios semanales.  
 - Cálculo automático de horas trabajadas.  
 - Alertas por exceso de jornada laboral.  
-- Almacenamiento local en **SQLite**.  
-- Exportación de horarios en **PDF / Email**.  
-- Consulta de **festivos**.  
+- Almacenamiento local en SQLite.  
+- Exportación de horarios en PDF / Email.  
+- Consulta de festivos.  
 
 ---
 
-## 🛠️ Tecnologías utilizadas
+## Tecnologías utilizadas
 
 - **.NET MAUI** (multi-plataforma: Android, iOS, Windows).  
 - **SQLite** para persistencia de datos.  
@@ -27,7 +27,7 @@
 
 ---
 
-## 📂 Estructura inicial del proyecto
+## Estructura inicial del proyecto
 
 - `Views/` → Pantallas (UI).  
 - `ViewModels/` → Lógica de presentación (MVVM).  
@@ -36,7 +36,7 @@
 
 ---
 
-## 📌 Diario de desarrollo
+## Diario de desarrollo
 
 ### 🔹 Semana 1 – Preparación del entorno y base del proyecto
 - [x] Creación del repositorio en GitHub.  
@@ -55,14 +55,14 @@
 
 ---
 
-## 📚 Otros aprendizajes y recursos
+## Otros aprendizajes y recursos
 
 - Curso seguido: [Documentación oficial de .NET MAUI en Microsoft Learn](https://learn.microsoft.com/es-es/dotnet/maui/).  
 - Guías de SQLite en MAUI: [sqlite-net-pcl GitHub](https://github.com/praeclarum/sqlite-net). 
 - Uso de IAs como herramienta de ayuda (ChatGPT).
 ---
 
-## 🚀 Estado del proyecto
+## Estado del proyecto
 
 - [x] Creación del repositorio GitHub.  
 - [x] Configuración de entorno MAUI.  
@@ -73,6 +73,6 @@
 
 ---
 
-## 👩‍💻 Autora
+## Autora
 
-Proyecto desarrollado por **[Tu Nombre]** como trabajo final.  
+Proyecto desarrollado por **Natalia Leonardi Caffeu**.  

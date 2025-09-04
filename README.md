@@ -1,4 +1,4 @@
-# 📅 PlanHora
+# PlanHora
 
 **PlanHora** es una aplicación móvil desarrollada en **.NET MAUI**, orientada a la **gestión de turnos y horarios de empleados**, pensada inicialmente para negocios de hostelería, pero adaptable a cualquier sector que requiera planificación horaria semanal del personal.  
 

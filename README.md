@@ -61,9 +61,9 @@
 ### Fase 3 – Gestión de empleados y locales
 
 - [x] **05/10/2025** – Pantalla para listar empleados.
-- [x] - Pantalla para añadir/editar empleados (nombre, jornada semanal, contrato).
-- [x] - Pantalla para añadir/editar locales.
-- [x] - Validaciones básicas de formularios.
+- [ ] - Pantalla para añadir/editar empleados (nombre, jornada semanal, contrato).
+- [ ] - Pantalla para añadir/editar locales.
+- [ ] - Validaciones básicas de formularios.
 
 ## Problemas encontrados y soluciones
 

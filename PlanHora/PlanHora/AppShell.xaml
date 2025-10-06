@@ -3,12 +3,24 @@
     x:Class="PlanHora.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:local="clr-namespace:PlanHora"
+    xmlns:views="clr-namespace:PlanHora.Views"
     Title="PlanHora">
 
+    <!-- Página inicial: Login -->
     <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
+        Title="Login"
+        ContentTemplate="{DataTemplate views:LoginPage}"
+        Route="LoginPage" />
+
+    <!-- Página de selección de local -->
+    <ShellContent
+        Title="Seleccionar Local"
+        ContentTemplate="{DataTemplate views:SelectLocalPage}"
+        Route="SelectLocalPage" />
+
+    <ShellContent 
+        Title="Empleados" 
+        ContentTemplate="{DataTemplate views:EmpleadosPage}" 
+        Route="EmpleadosPage" />
 
 </Shell>

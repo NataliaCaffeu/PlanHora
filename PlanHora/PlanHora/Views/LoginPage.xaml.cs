@@ -1,9 +1,18 @@
-namespace PlanHora.Views;
+using Microsoft.Maui.Controls;
 
-public partial class NewPage1 : ContentPage
+namespace PlanHora.Views
 {
-	public NewPage1()
-	{
-		InitializeComponent();
-	}
+    public partial class LoginPage : ContentPage
+    {
+        public LoginPage()
+        {
+            InitializeComponent();
+        }
+
+        private async void OnLoginClicked(object sender, EventArgs e)
+        {
+            await Shell.Current.GoToAsync("//SelectLocalPage");
+        }
+    }
 }
+

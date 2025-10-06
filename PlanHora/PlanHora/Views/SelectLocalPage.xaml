@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PlanHora.Views.SelectLocalPage"
+             Title="Seleccionar Local">
+
+    <VerticalStackLayout Padding="20">
+        <Label Text="Selecciona un local" FontAttributes="Bold" FontSize="18" />
+        <CollectionView x:Name="LocalesCollection" SelectionMode="Single" SelectionChanged="OnLocalSelected">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Frame Padding="10" Margin="5" BorderColor="Gray" CornerRadius="10">
+                        <Label Text="{Binding Nombre}" FontSize="16" />
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+        <Button Text="Añadir local de prueba" Clicked="OnAddLocalClicked" />
+    </VerticalStackLayout>
+</ContentPage>

@@ -1,55 +1,46 @@
 ﻿using PlanHora.Models;
 using SQLite;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.IO;
 using System.Threading.Tasks;
+using Microsoft.Maui.Storage;
 
 namespace PlanHora.Services
 {
-    internal class DatabaseService
+    public class DatabaseService
     {
-        private SQLiteConnection _database;
+        private readonly SQLiteAsyncConnection _db;
 
         public DatabaseService()
         {
-            // Definir la ruta del archivo de base de datos local
-            var dbPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "planhora.db3");
-
-            // Crear la conexión
-            _database = new SQLiteConnection(dbPath);
+            var dbPath = Path.Combine(FileSystem.AppDataDirectory, "planhora.db3");
+            _db = new SQLiteAsyncConnection(dbPath);
 
             // Crear tablas si no existen
-            _database.CreateTable<Local>();
-            _database.CreateTable<Empleado>();
-            _database.CreateTable<Horario>();
-            _database.CreateTable<Festivo>();
-
+            _db.CreateTableAsync<Local>().Wait();
+            _db.CreateTableAsync<Empleado>().Wait();
+            _db.CreateTableAsync<Horario>().Wait();
+            _db.CreateTableAsync<Festivo>().Wait();
         }
 
-        // Métodos para Local 
-        public List<Local> GetLocales() => _database.Table<Local>().ToList();
-        public void AddLocal(Local local) => _database.Insert(local);
-        public void UpdateLocal(Local local) => _database.Update(local);
-        public void DeleteLocal(Local local) => _database.Delete(local);
+        // Métodos para Local
+        public Task<List<Local>> GetLocalesAsync() => _db.Table<Local>().ToListAsync();
+        public Task<int> SaveLocalAsync(Local local) =>
+            local.Id == 0 ? _db.InsertAsync(local) : _db.UpdateAsync(local);
 
-        // Métodos para Empleado 
-        public List<Empleado> GetEmpleados() => _database.Table<Empleado>().ToList();
-        public void AddEmpleado(Empleado empleado) => _database.Insert(empleado);
-        public void UpdateEmpleado(Empleado empleado) => _database.Update(empleado);
-        public void DeleteEmpleado(Empleado empleado) => _database.Delete(empleado);
+        // Métodos para Empleado
+        public Task<List<Empleado>> GetEmpleadosAsync() => _db.Table<Empleado>().ToListAsync();
+        public Task<int> SaveEmpleadoAsync(Empleado empleado) =>
+            empleado.Id == 0 ? _db.InsertAsync(empleado) : _db.UpdateAsync(empleado);
 
-        // Métodos para Horario 
-        public List<Horario> GetHorarios() => _database.Table<Horario>().ToList();
-        public void AddHorario(Horario horario) => _database.Insert(horario);
-        public void UpdateHorario(Horario horario) => _database.Update(horario);
-        public void DeleteHorario(Horario horario) => _database.Delete(horario);
+        // Métodos para Horario
+        public Task<List<Horario>> GetHorariosAsync() => _db.Table<Horario>().ToListAsync();
+        public Task<int> SaveHorarioAsync(Horario horario) =>
+            horario.Id == 0 ? _db.InsertAsync(horario) : _db.UpdateAsync(horario);
 
-        // Métodos para Festivo 
-        public List<Festivo> GetFestivos() => _database.Table<Festivo>().ToList();
-        public void AddFestivo(Festivo festivo) => _database.Insert(festivo);
-        public void UpdateFestivo(Festivo festivo) => _database.Update(festivo);
-        public void DeleteFestivo(Festivo festivo) => _database.Delete(festivo);
+        // Métodos para Festivo
+        public Task<List<Festivo>> GetFestivosAsync() => _db.Table<Festivo>().ToListAsync();
+        public Task<int> SaveFestivoAsync(Festivo festivo) =>
+            festivo.Id == 0 ? _db.InsertAsync(festivo) : _db.UpdateAsync(festivo);
     }
 }

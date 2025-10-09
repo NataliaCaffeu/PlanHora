@@ -24,15 +24,27 @@ namespace PlanHora.Views
         private async void OnAddEmpleadoClicked(object sender, EventArgs e)
         {
             // añadir un empleado de prueba
-            var empleado = new Empleado
-            {
-                Nombre = "Empleado Prueba",
-                Puesto = "Camarero",
-                JornadaSemanal = 40,
-                LocalId = 1 
-            };
-            await _db.SaveEmpleadoAsync(empleado);
-            EmpleadosCollection.ItemsSource = await _db.GetEmpleadosAsync();
+            //var empleado = new Empleado
+            //{
+            //    Nombre = "Empleado Prueba",
+            //    Puesto = "Camarero",
+            //    JornadaSemanal = 40,
+            //    LocalId = 1 
+            //};
+            //await _db.SaveEmpleadoAsync(empleado);
+            //EmpleadosCollection.ItemsSource = await _db.GetEmpleadosAsync();
+
+            await Navigation.PushAsync(new EmpleadoFormPage());
         }
+
+        private async void OnEmpleadoSelected(object sender, SelectionChangedEventArgs e)
+        {
+            if (e.CurrentSelection.FirstOrDefault() is Empleado empleado)
+            {
+                await Navigation.PushAsync(new EmpleadoFormPage(empleado));
+                EmpleadosCollection.SelectedItem = null;
+            }
+        }
+
     }
 }

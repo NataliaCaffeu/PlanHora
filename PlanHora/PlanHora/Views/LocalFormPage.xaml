@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PlanHora.Views.LocalFormPage"
+             Title="Local">
+
+    <VerticalStackLayout Padding="20" Spacing="15">
+        <Entry x:Name="NombreEntry" Placeholder="Nombre del local" />
+        <Entry x:Name="AperturaEntry" Placeholder="Hora de apertura (HH:mm)" Keyboard="Numeric"/>
+        <Entry x:Name="CierreEntry" Placeholder="Hora de cierre (HH:mm)" Keyboard="Numeric"/>
+        <Button Text="Guardar" Clicked="OnGuardarClicked"/>
+    </VerticalStackLayout>
+</ContentPage>

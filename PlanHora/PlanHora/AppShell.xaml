@@ -9,18 +9,19 @@
     <!-- Página inicial: Login -->
     <ShellContent
         Title="Login"
-        ContentTemplate="{DataTemplate views:LoginPage}"
-        Route="LoginPage" />
+        Route="LoginPage"
+        ContentTemplate="{DataTemplate views:LoginPage}" />
 
     <!-- Página de selección de local -->
     <ShellContent
         Title="Seleccionar Local"
-        ContentTemplate="{DataTemplate views:SelectLocalPage}"
-        Route="SelectLocalPage" />
+        Route="SelectLocalPage"
+        ContentTemplate="{DataTemplate views:SelectLocalPage}" />
 
+    <!-- Página de empleados -->
     <ShellContent 
         Title="Empleados" 
-        ContentTemplate="{DataTemplate views:EmpleadosPage}" 
-        Route="EmpleadosPage" />
+        Route="EmpleadosPage"
+        ContentTemplate="{DataTemplate views:EmpleadosPage}" />
 
 </Shell>

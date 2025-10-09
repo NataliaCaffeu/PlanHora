@@ -15,6 +15,6 @@
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
-        <Button Text="Añadir local de prueba" Clicked="OnAddLocalClicked" />
+        <Button Text="Agregar Local" Clicked="OnAddLocalClicked"/>
     </VerticalStackLayout>
 </ContentPage>

@@ -24,9 +24,7 @@ namespace PlanHora.Views
 
         private async void OnAddLocalClicked(object sender, EventArgs e)
         {
-            var local = new Local { Nombre = "Curruncho", Apertura = "11:00", Cierre = "23:00" };
-            await _db.SaveLocalAsync(local);
-            LocalesCollection.ItemsSource = await _db.GetLocalesAsync();
+            await Navigation.PushAsync(new LocalFormPage());
         }
 
         private async void OnLocalSelected(object sender, SelectionChangedEventArgs e)

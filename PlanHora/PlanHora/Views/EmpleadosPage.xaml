@@ -7,7 +7,7 @@
 
     <VerticalStackLayout Padding="20" Spacing="15">
         <Button Text="Agregar Empleado" Clicked="OnAddEmpleadoClicked"/>
-        <CollectionView x:Name="EmpleadosCollection">
+        <!--<CollectionView x:Name="EmpleadosCollection">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <Border Stroke="LightGray" StrokeThickness="1" Padding="10" Margin="5" StrokeShape="RoundRectangle 10">
@@ -19,6 +19,23 @@
                     </Border>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
+        </CollectionView>-->
+        <CollectionView x:Name="EmpleadosCollection"
+                SelectionMode="Single"
+                SelectionChanged="OnEmpleadoSelected">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Frame BorderColor="LightGray" Padding="10" Margin="5">
+                        <StackLayout>
+                            <Label Text="{Binding Nombre}" FontSize="18"/>
+                            <Label Text="{Binding Puesto}" FontSize="14"/>
+                            <Label Text="Jornada: {Binding JornadaSemanal} horas" FontSize="14"/>
+                        </StackLayout>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
         </CollectionView>
+
+
     </VerticalStackLayout>
 </ContentPage>

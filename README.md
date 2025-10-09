@@ -61,9 +61,9 @@
 ### Fase 3 – Gestión de empleados y locales
 
 - [x] **05/10/2025** – Pantalla para listar empleados.
-- [ ] - Pantalla para añadir/editar empleados (nombre, jornada semanal, contrato).
-- [ ] - Pantalla para añadir/editar locales.
-- [ ] - Validaciones básicas de formularios.
+- [x] **09/10/2025** - Pantalla para añadir empleados (nombre, jornada semanal, contrato).
+- [x] **09/10/2025** - Pantalla para añadir locales.
+- [x] **09/10/2025** - Validaciones básicas de formularios.
 
 ## Problemas encontrados y soluciones
 
@@ -84,8 +84,9 @@ Inicialmente se usaban métodos sincrónicos (SQLiteConnection), lo que podía b
   - **Solución:** Se usaron propiedades necesarias (required) en modelos para asegurar que los campos no queden nulos.
   - **Solución:** Ajustes en el código y inicialización de entidades permitieron que SQLite pueda trabajar correctamente con estas propiedades.
 - Obsolescencia de Frame en MAUI
-Frame aparece obsoleto en .NET 9.
-  - **Solución:** se reemplazó por Border con VerticalStackLayout para mantener la apariencia. 
+Errores de compilación y ejecución relacionados con emulador Android y Fast Deployment
+- **Solución:** desactivar temporalmente OneDrive para la carpeta del proyecto, limpiar manualmente bin y obj, desactivar “Implementación rápida” en las propiedades del proyecto → Android → Debug y volver a ejecutar.
+Advertencias XAML de bindings (Binding could be compiled to improve runtime performance)
 
 ### Pruebas realizadas
 

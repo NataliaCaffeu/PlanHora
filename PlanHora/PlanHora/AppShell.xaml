@@ -24,4 +24,10 @@
         Route="EmpleadosPage"
         ContentTemplate="{DataTemplate views:EmpleadosPage}" />
 
+    <!-- Página de horarios -->
+    <ShellContent 
+    Title="Horarios" 
+    Route="HorariosPage"
+    ContentTemplate="{DataTemplate views:HorariosPage}" />
+
 </Shell>

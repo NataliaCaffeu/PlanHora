@@ -94,17 +94,17 @@ Errores de compilación y ejecución relacionados con emulador Android y Fast De
 Advertencias XAML de bindings (Binding could be compiled to improve runtime performance)
 ##### Fase 4:
 - Campos de sábado y domingo solapados en la UI
-**Solución:** Ajuste de la definición de filas del Grid en HorariosPage.xaml para que cada día tenga su propia fila y no se superpongan.
+  - **Solución:** Ajuste de la definición de filas del Grid en HorariosPage.xaml para que cada día tenga su propia fila y no se superpongan.
 - No se cargaban los horarios existentes al seleccionar un empleado
-**Solución:** Se implementó el método LoadHorarioEmpleado en HorariosPage.xaml.cs y se enlazó al evento SelectedIndexChanged del Picker para precargar los horarios desde la base de datos.
+  - **Solución:** Se implementó el método LoadHorarioEmpleado en HorariosPage.xaml.cs y se enlazó al evento SelectedIndexChanged del Picker para precargar los horarios desde la base de datos.
 - Creación de duplicados al guardar un horario ya existente
-**Solución:** Se agregó lógica en OnSaveClicked para verificar si existe un registro previo para ese empleado y día. Si existe, se actualiza con UpdateAsync en lugar de crear uno nuevo con InsertAsync.
+  - **Solución:** Se agregó lógica en OnSaveClicked para verificar si existe un registro previo para ese empleado y día. Si existe, se actualiza con UpdateAsync en lugar de crear uno nuevo con InsertAsync.
 - Actualización de horarios no reflejada en la UI ni en la base de datos
-**Solución:** Se reemplazó la lista simple por un diccionario Dictionary<string, Horario> para gestionar los horarios por día y empleado, garantizando que cada día se actualice correctamente y que los cambios se persistan.
+  - **Solución:** Se reemplazó la lista simple por un diccionario Dictionary<string, Horario> para gestionar los horarios por día y empleado, garantizando que cada día se actualice correctamente y que los cambios se persistan.
 - Errores de nulabilidad en los parámetros del evento OnSaveClicked y SelectedIndexChanged
-**Solución:** Se ajustaron los parámetros a object? sender, EventArgs? e para coincidir con la firma del delegado y evitar advertencias de compilación.
+  - **Solución:** Se ajustaron los parámetros a object? sender, EventArgs? e para coincidir con la firma del delegado y evitar advertencias de compilación.
 - Duplicidad de claves al usar días como identificador
-**Solución:** Se manejó un diccionario por día, evitando que se intenten agregar claves duplicadas (Key: Lunes) y garantizando que se actualicen los horarios existentes.
+  - **Solución:** Se manejó un diccionario por día, evitando que se intenten agregar claves duplicadas (Key: Lunes) y garantizando que se actualicen los horarios existentes.
 
 ### Pruebas realizadas
 

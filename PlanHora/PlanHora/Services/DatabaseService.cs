@@ -21,6 +21,7 @@ namespace PlanHora.Services
             _db.CreateTableAsync<Empleado>().Wait();
             _db.CreateTableAsync<Horario>().Wait();
             _db.CreateTableAsync<Festivo>().Wait();
+            _db.CreateTableAsync<Usuario>().Wait();
         }
 
         // Métodos para Local
@@ -42,5 +43,34 @@ namespace PlanHora.Services
         public Task<List<Festivo>> GetFestivosAsync() => _db.Table<Festivo>().ToListAsync();
         public Task<int> SaveFestivoAsync(Festivo festivo) =>
             festivo.Id == 0 ? _db.InsertAsync(festivo) : _db.UpdateAsync(festivo);
+
+
+        // Métodos para usuario
+        public async Task<int> SaveUsuarioAsync(Usuario usuario)
+        {
+            var existente = await _db.Table<Usuario>()
+                .Where(u => u.NombreUsuario == usuario.NombreUsuario)
+                .FirstOrDefaultAsync();
+
+            if (existente != null)
+                throw new Exception("El usuario ya existe.");
+
+            return await _db.InsertAsync(usuario);
+        }
+
+
+        public Task<Usuario> GetUsuarioAsync(string nombreUsuario, string contrasena)
+        {
+            return _db.Table<Usuario>()
+                      .Where(u => u.NombreUsuario == nombreUsuario && u.Contrasena == contrasena)
+                      .FirstOrDefaultAsync();
+        }
+
+        public Task<int> DeleteEmpleadoAsync(Empleado empleado)
+        {
+            return _db.DeleteAsync(empleado);
+        }
+
+
     }
 }

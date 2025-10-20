@@ -2,74 +2,46 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="PlanHora.Views.HorariosPage"
-             Title="Planificación Semanal">
+             Title="Horarios">
 
     <ScrollView>
-        <VerticalStackLayout Padding="20" Spacing="20">
+        <VerticalStackLayout Padding="20" Spacing="15">
 
-            <!-- Selección de empleado -->
+            <Label Text="Selecciona un empleado"
+                   FontAttributes="Bold"
+                   FontSize="18"
+                   HorizontalOptions="Center" />
+
             <Picker x:Name="EmpleadoPicker"
-                    Title="Selecciona un empleado"
-                    ItemDisplayBinding="{Binding Nombre}"
-                    SelectedIndexChanged="EmpleadoPicker_SelectedIndexChanged" />
+                    Title="Seleccionar Empleado"
+                    ItemDisplayBinding="{Binding Nombre}" 
+                    SelectedIndexChanged="OnEmpleadoSelected"/>
 
-            <!-- Tabla de planificación semanal -->
-            <Grid ColumnDefinitions="*, Auto, Auto" RowSpacing="10" ColumnSpacing="10">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <!-- Encabezado -->
-                    <RowDefinition Height="Auto"/>
-                    <!-- Lunes -->
-                    <RowDefinition Height="Auto"/>
-                    <!-- Martes -->
-                    <RowDefinition Height="Auto"/>
-                    <!-- Miércoles -->
-                    <RowDefinition Height="Auto"/>
-                    <!-- Jueves -->
-                    <RowDefinition Height="Auto"/>
-                    <!-- Viernes -->
-                    <RowDefinition Height="Auto"/>
-                    <!-- Sábado -->
-                    <RowDefinition Height="Auto"/>
-                    <!-- Domingo -->
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
+            <Label Text="Horario del empleado seleccionado:" 
+                   FontAttributes="Bold" 
+                   FontSize="16"
+                   Margin="0,20,0,0" />
 
-                <Label Text="Día" FontAttributes="Bold"/>
-                <Label Grid.Column="1" Text="Entrada" FontAttributes="Bold"/>
-                <Label Grid.Column="2" Text="Salida" FontAttributes="Bold"/>
+            <CollectionView x:Name="HorariosCollectionView">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Border Stroke="LightGray"
+                            StrokeThickness="1"
+                            Padding="10"
+                            Margin="5"
+                            StrokeShape="RoundRectangle 10">
+                            <VerticalStackLayout>
+                                <Label Text="{Binding DiaSemana}" FontAttributes="Bold" />
+                                <Label Text="{Binding HoraEntrada}" />
+                                <Label Text="{Binding HoraSalida}" />
+                            </VerticalStackLayout>
+                        </Border>
 
-                <!-- Días de la semana -->
-                <Label Grid.Row="1" Text="Lunes"/>
-                <Entry x:Name="EntradaLunes" Grid.Row="1" Grid.Column="1" Placeholder="08:00"/>
-                <Entry x:Name="SalidaLunes" Grid.Row="1" Grid.Column="2" Placeholder="16:00"/>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
 
-                <Label Grid.Row="2" Text="Martes"/>
-                <Entry x:Name="EntradaMartes" Grid.Row="2" Grid.Column="1" Placeholder="08:00"/>
-                <Entry x:Name="SalidaMartes" Grid.Row="2" Grid.Column="2" Placeholder="16:00"/>
-
-                <Label Grid.Row="3" Text="Miércoles"/>
-                <Entry x:Name="EntradaMiercoles" Grid.Row="3" Grid.Column="1" Placeholder="08:00"/>
-                <Entry x:Name="SalidaMiercoles" Grid.Row="3" Grid.Column="2" Placeholder="16:00"/>
-
-                <Label Grid.Row="4" Text="Jueves"/>
-                <Entry x:Name="EntradaJueves" Grid.Row="4" Grid.Column="1" Placeholder="08:00"/>
-                <Entry x:Name="SalidaJueves" Grid.Row="4" Grid.Column="2" Placeholder="16:00"/>
-
-                <Label Grid.Row="5" Text="Viernes"/>
-                <Entry x:Name="EntradaViernes" Grid.Row="5" Grid.Column="1" Placeholder="08:00"/>
-                <Entry x:Name="SalidaViernes" Grid.Row="5" Grid.Column="2" Placeholder="16:00"/>
-
-                <Label Grid.Row="6" Text="Sábado"/>
-                <Entry x:Name="EntradaSabado" Grid.Row="6" Grid.Column="1" Placeholder="08:00"/>
-                <Entry x:Name="SalidaSabado" Grid.Row="6" Grid.Column="2" Placeholder="16:00"/>
-
-                <Label Grid.Row="7" Text="Domingo"/>
-                <Entry x:Name="EntradaDomingo" Grid.Row="7" Grid.Column="1" Placeholder="08:00"/>
-                <Entry x:Name="SalidaDomingo" Grid.Row="7" Grid.Column="2" Placeholder="16:00"/>
-            </Grid>
-
-            <Button Text="Guardar horario" Clicked="OnSaveClicked" />
+            <Button Text="Agregar Horario" Clicked="OnAddHorarioClicked" />
 
         </VerticalStackLayout>
     </ScrollView>

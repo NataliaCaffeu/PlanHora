@@ -4,17 +4,17 @@
              x:Class="PlanHora.Views.SelectLocalPage"
              Title="Seleccionar Local">
 
-    <VerticalStackLayout Padding="20">
-        <Label Text="Selecciona un local" FontAttributes="Bold" FontSize="18" />
-        <CollectionView x:Name="LocalesCollection" SelectionMode="Single" SelectionChanged="OnLocalSelected">
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <Frame Padding="10" Margin="5" BorderColor="Gray" CornerRadius="10">
-                        <Label Text="{Binding Nombre}" FontSize="16" />
-                    </Frame>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
-        <Button Text="Agregar Local" Clicked="OnAddLocalClicked"/>
+    <VerticalStackLayout Padding="20" Spacing="15">
+        <Label Text="Selecciona un local para continuar" 
+               FontSize="18" 
+               FontAttributes="Bold" 
+               HorizontalOptions="Center" />
+
+        <Picker x:Name="LocalPicker"
+                Title="Seleccionar Local"
+                ItemDisplayBinding="{Binding Nombre}"
+                SelectedIndexChanged="OnLocalSelected" />
+
+        <Button Text="Agregar Local" Clicked="OnAddLocalClicked" />
     </VerticalStackLayout>
 </ContentPage>

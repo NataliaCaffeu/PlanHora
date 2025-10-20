@@ -8,9 +8,25 @@ using System.Threading.Tasks;
 
 namespace PlanHora.Views
 {
+    [QueryProperty(nameof(LocalId), "localId")]
     public partial class HorariosPage : ContentPage
     {
         private readonly DatabaseService _db;
+        private int _localId;
+        private Local _localSeleccionado;
+        private List<Empleado> _empleados = new();
+
+        public int LocalId
+        {
+            get => _localId;
+            set
+            {
+                _localId = value;
+                // Cargar el objeto Local desde la base de datos
+                LoadLocalAsync(_localId);
+                LoadEmpleadosAsync();
+            }
+        }
 
         public HorariosPage()
         {
@@ -18,122 +34,77 @@ namespace PlanHora.Views
             _db = new DatabaseService();
         }
 
-        protected override async void OnAppearing()
+        private async void LoadLocalAsync(int localId)
         {
-            base.OnAppearing();
-            var empleados = await _db.GetEmpleadosAsync();
-            EmpleadoPicker.ItemsSource = empleados;
-        }
+            var locales = await _db.GetLocalesAsync();
+            _localSeleccionado = locales.FirstOrDefault(l => l.Id == localId);
 
-        private async void EmpleadoPicker_SelectedIndexChanged(object? sender, EventArgs? e)
-        {
-            if (EmpleadoPicker.SelectedItem is Empleado empleado)
+            if (_localSeleccionado == null)
             {
-                await LoadHorarioEmpleadoAsync(empleado);
+                await DisplayAlert("Error", "No se encontró el local seleccionado.", "OK");
+                return;
             }
         }
 
-        private async Task LoadHorarioEmpleadoAsync(Empleado empleado)
+        private async void LoadEmpleadosAsync()
         {
-            var horarios = await _db.GetHorariosAsync();
-            var empleadoHorarios = horarios.Where(h => h.EmpleadoId == empleado.Id).ToList();
+            if (_localId <= 0)
+                return;
 
-            // Limpiar campos
-            EntradaLunes.Text = SalidaLunes.Text = "";
-            EntradaMartes.Text = SalidaMartes.Text = "";
-            EntradaMiercoles.Text = SalidaMiercoles.Text = "";
-            EntradaJueves.Text = SalidaJueves.Text = "";
-            EntradaViernes.Text = SalidaViernes.Text = "";
-            EntradaSabado.Text = SalidaSabado.Text = "";
-            EntradaDomingo.Text = SalidaDomingo.Text = "";
+            // Obtener los empleados del local
+            _empleados = await _db.GetEmpleadosAsync();
+            var empleadosLocal = _empleados.Where(e => e.LocalId == _localId).ToList();
 
-            foreach (var h in empleadoHorarios)
+            EmpleadoPicker.ItemsSource = empleadosLocal;
+
+            // Vaciar selección y lista de horarios al cambiar de local
+            EmpleadoPicker.SelectedItem = null;
+            HorariosCollectionView.ItemsSource = null;
+
+            if (!empleadosLocal.Any())
             {
-                switch (h.Dia)
-                {
-                    case "Lunes":
-                        EntradaLunes.Text = h.HoraEntrada;
-                        SalidaLunes.Text = h.HoraSalida;
-                        break;
-                    case "Martes":
-                        EntradaMartes.Text = h.HoraEntrada;
-                        SalidaMartes.Text = h.HoraSalida;
-                        break;
-                    case "Miércoles":
-                        EntradaMiercoles.Text = h.HoraEntrada;
-                        SalidaMiercoles.Text = h.HoraSalida;
-                        break;
-                    case "Jueves":
-                        EntradaJueves.Text = h.HoraEntrada;
-                        SalidaJueves.Text = h.HoraSalida;
-                        break;
-                    case "Viernes":
-                        EntradaViernes.Text = h.HoraEntrada;
-                        SalidaViernes.Text = h.HoraSalida;
-                        break;
-                    case "Sábado":
-                        EntradaSabado.Text = h.HoraEntrada;
-                        SalidaSabado.Text = h.HoraSalida;
-                        break;
-                    case "Domingo":
-                        EntradaDomingo.Text = h.HoraEntrada;
-                        SalidaDomingo.Text = h.HoraSalida;
-                        break;
-                }
+                await DisplayAlert("Aviso", "Este local no tiene empleados registrados aún.", "OK");
             }
         }
 
-        private async void OnSaveClicked(object? sender, EventArgs? e)
+        private async void OnAddHorarioClicked(object sender, EventArgs e)
         {
-            if (EmpleadoPicker.SelectedItem is not Empleado empleado)
+            if (EmpleadoPicker.SelectedItem is not Empleado empleadoSeleccionado)
             {
-                await DisplayAlert("Error", "Selecciona un empleado antes de guardar.", "OK");
+                await DisplayAlert("Error", "Debes seleccionar un empleado antes de agregar horarios.", "OK");
                 return;
             }
 
-            // Traer horarios existentes del empleado
-            var allHorarios = await _db.GetHorariosAsync();
-            var empleadoHorarios = allHorarios.Where(h => h.EmpleadoId == empleado.Id).ToList();
-
-            var dias = new List<(string Dia, Entry Entrada, Entry Salida)>
+            if (_localSeleccionado == null)
             {
-                ("Lunes", EntradaLunes, SalidaLunes),
-                ("Martes", EntradaMartes, SalidaMartes),
-                ("Miércoles", EntradaMiercoles, SalidaMiercoles),
-                ("Jueves", EntradaJueves, SalidaJueves),
-                ("Viernes", EntradaViernes, SalidaViernes),
-                ("Sábado", EntradaSabado, SalidaSabado),
-                ("Domingo", EntradaDomingo, SalidaDomingo)
-            };
-
-            foreach (var (dia, entrada, salida) in dias)
-            {
-                var horarioExistente = empleadoHorarios.FirstOrDefault(h => h.Dia == dia);
-                if (horarioExistente != null)
-                {
-                    // Actualizar horario existente usando su Id
-                    horarioExistente.HoraEntrada = entrada.Text;
-                    horarioExistente.HoraSalida = salida.Text;
-                    await _db.SaveHorarioAsync(horarioExistente);
-                }
-                else
-                {
-                    // Crear nuevo horario solo si no existe
-                    var nuevoHorario = new Horario
-                    {
-                        EmpleadoId = empleado.Id,
-                        Dia = dia,
-                        HoraEntrada = entrada.Text,
-                        HoraSalida = salida.Text
-                    };
-                    await _db.SaveHorarioAsync(nuevoHorario);
-                }
+                await DisplayAlert("Error", "No se ha cargado correctamente el local.", "OK");
+                return;
             }
 
-            await DisplayAlert("Éxito", "Horario guardado correctamente.", "OK");
+            // Abrir HorarioFormPage pasando el empleado y el local
+            await Navigation.PushAsync(new HorarioFormPage(empleadoSeleccionado, _localSeleccionado));
+        }
 
-            // Refrescar los campos para mostrar los datos guardados
-            await LoadHorarioEmpleadoAsync(empleado);
+        protected override async void OnAppearing()
+        {
+            base.OnAppearing();
+
+            if (EmpleadoPicker.SelectedItem is Empleado empleado)
+                await CargarHorariosAsync(empleado.Id);
+        }
+
+        private async void OnEmpleadoSelected(object sender, EventArgs e)
+        {
+            if (EmpleadoPicker.SelectedItem is Empleado empleadoSeleccionado)
+                await CargarHorariosAsync(empleadoSeleccionado.Id);
+        }
+
+        private async Task CargarHorariosAsync(int empleadoId)
+        {
+            var horarios = await _db.GetHorariosAsync();
+            HorariosCollectionView.ItemsSource = horarios
+                .Where(h => h.EmpleadoId == empleadoId)
+                .ToList();
         }
     }
 }

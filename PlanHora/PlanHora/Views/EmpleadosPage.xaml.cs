@@ -1,6 +1,9 @@
 using PlanHora.Models;
 using PlanHora.Services;
 using Microsoft.Maui.Controls;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace PlanHora.Views
 {
@@ -14,37 +17,50 @@ namespace PlanHora.Views
             _db = new DatabaseService();
         }
 
-        protected override async void OnAppearing()
-        {
-            base.OnAppearing();
-            // Cargar empleados desde la base de datos
-            EmpleadosCollection.ItemsSource = await _db.GetEmpleadosAsync();
-        }
-
         private async void OnAddEmpleadoClicked(object sender, EventArgs e)
         {
-            // añadir un empleado de prueba
-            //var empleado = new Empleado
-            //{
-            //    Nombre = "Empleado Prueba",
-            //    Puesto = "Camarero",
-            //    JornadaSemanal = 40,
-            //    LocalId = 1 
-            //};
-            //await _db.SaveEmpleadoAsync(empleado);
-            //EmpleadosCollection.ItemsSource = await _db.GetEmpleadosAsync();
-
+            // Abrir el formulario de empleado sin LocalId fijo
             await Navigation.PushAsync(new EmpleadoFormPage());
         }
 
-        private async void OnEmpleadoSelected(object sender, SelectionChangedEventArgs e)
+        private async void OnDeleteEmpleadoClicked(object sender, EventArgs e)
         {
-            if (e.CurrentSelection.FirstOrDefault() is Empleado empleado)
+            // Obtener locales
+            var locales = await _db.GetLocalesAsync();
+            if (!locales.Any())
             {
-                await Navigation.PushAsync(new EmpleadoFormPage(empleado));
-                EmpleadosCollection.SelectedItem = null;
+                await DisplayAlert("Error", "No hay locales registrados.", "OK");
+                return;
+            }
+
+            // Pedir seleccionar local
+            string[] nombresLocales = locales.Select(l => l.Nombre).ToArray();
+            string seleccionado = await DisplayActionSheet("Selecciona un local", "Cancelar", null, nombresLocales);
+
+            if (string.IsNullOrEmpty(seleccionado) || seleccionado == "Cancelar")
+                return;
+
+            var localSeleccionado = locales.First(l => l.Nombre == seleccionado);
+
+            // Obtener empleados de ese local
+            var empleados = (await _db.GetEmpleadosAsync()).Where(emp => emp.LocalId == localSeleccionado.Id).ToList();
+            if (!empleados.Any())
+            {
+                await DisplayAlert("Aviso", "No hay empleados en este local.", "OK");
+                return;
+            }
+
+            // Mostrar lista con opción de borrar
+            foreach (var empleado in empleados)
+            {
+                bool borrar = await DisplayAlert("Borrar empleado",
+                    $"¿Deseas borrar a {empleado.Nombre} ({empleado.Puesto})?", "Sí", "No");
+
+                if (borrar)
+                {
+                    await _db.SaveEmpleadoAsync(new Empleado { Id = empleado.Id }); // Aquí cambiaríamos a Delete
+                }
             }
         }
-
     }
 }

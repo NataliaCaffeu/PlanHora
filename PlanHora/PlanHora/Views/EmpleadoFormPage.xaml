@@ -6,9 +6,15 @@
 
     <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="15">
-            <Entry x:Name="NombreEntry" Placeholder="Nombre del empleado"/>
-            <Entry x:Name="PuestoEntry" Placeholder="Puesto o cargo"/>
-            <Entry x:Name="JornadaEntry" Placeholder="Jornada semanal (horas)" Keyboard="Numeric"/>
+            <Entry x:Name="NombreEntry" Placeholder="Nombre del empleado" />
+            <Entry x:Name="PuestoEntry" Placeholder="Puesto o cargo" />
+            <Entry x:Name="JornadaEntry" Placeholder="Jornada semanal (horas)" Keyboard="Numeric" />
+
+            <Label Text="Seleccionar Local" FontAttributes="Bold" />
+            <Picker x:Name="LocalPicker"
+                    Title="Seleccionar Local"
+                    ItemDisplayBinding="{Binding Nombre}" />
+
             <Button Text="Guardar" Clicked="OnSaveClicked"/>
         </VerticalStackLayout>
     </ScrollView>

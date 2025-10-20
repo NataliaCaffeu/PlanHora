@@ -1,0 +1,87 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PlanHora.Views.HorarioFormPage"
+             Title="Horario">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="15">
+
+            <Label x:Name="EmpleadoLabel" 
+                    FontAttributes="Bold" 
+                    FontSize="18" />
+            
+            <Grid ColumnDefinitions="*, Auto, Auto, Auto" RowSpacing="10" ColumnSpacing="10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <!-- Cabecera -->
+                    <RowDefinition Height="Auto"/>
+                    <!-- Lunes -->
+                    <RowDefinition Height="Auto"/>
+                    <!-- Martes -->
+                    <RowDefinition Height="Auto"/>
+                    <!-- Miércoles -->
+                    <RowDefinition Height="Auto"/>
+                    <!-- Jueves -->
+                    <RowDefinition Height="Auto"/>
+                    <!-- Viernes -->
+                    <RowDefinition Height="Auto"/>
+                    <!-- Sábado -->
+                    <RowDefinition Height="Auto"/>
+                    <!-- Domingo -->
+                </Grid.RowDefinitions>
+
+                <!-- Cabecera -->
+                <Label Text="Día" FontAttributes="Bold"/>
+                <Label Grid.Column="1" Text="Entrada" FontAttributes="Bold"/>
+                <Label Grid.Column="2" Text="Salida" FontAttributes="Bold"/>
+                <Label Grid.Column="3" Text="Libre" FontAttributes="Bold"/>
+
+                <!-- Lunes -->
+                <Label Grid.Row="1" Text="Lunes"/>
+                <Entry x:Name="EntradaLunes" Grid.Row="1" Grid.Column="1" Placeholder="08:00"/>
+                <Entry x:Name="SalidaLunes" Grid.Row="1" Grid.Column="2" Placeholder="16:00"/>
+                <CheckBox x:Name="LibreLunes" Grid.Row="1" Grid.Column="3" CheckedChanged="OnDiaLibreCheckedChanged"/>
+
+                <!-- Martes -->
+                <Label Grid.Row="2" Text="Martes"/>
+                <Entry x:Name="EntradaMartes" Grid.Row="2" Grid.Column="1" Placeholder="08:00"/>
+                <Entry x:Name="SalidaMartes" Grid.Row="2" Grid.Column="2" Placeholder="16:00"/>
+                <CheckBox x:Name="LibreMartes" Grid.Row="2" Grid.Column="3" CheckedChanged="OnDiaLibreCheckedChanged"/>
+
+                <!-- Miércoles -->
+                <Label Grid.Row="3" Text="Miércoles"/>
+                <Entry x:Name="EntradaMiercoles" Grid.Row="3" Grid.Column="1" Placeholder="08:00"/>
+                <Entry x:Name="SalidaMiercoles" Grid.Row="3" Grid.Column="2" Placeholder="16:00"/>
+                <CheckBox x:Name="LibreMiercoles" Grid.Row="3" Grid.Column="3" CheckedChanged="OnDiaLibreCheckedChanged"/>
+
+                <!-- Jueves -->
+                <Label Grid.Row="4" Text="Jueves"/>
+                <Entry x:Name="EntradaJueves" Grid.Row="4" Grid.Column="1" Placeholder="08:00"/>
+                <Entry x:Name="SalidaJueves" Grid.Row="4" Grid.Column="2" Placeholder="16:00"/>
+                <CheckBox x:Name="LibreJueves" Grid.Row="4" Grid.Column="3" CheckedChanged="OnDiaLibreCheckedChanged"/>
+
+                <!-- Viernes -->
+                <Label Grid.Row="5" Text="Viernes"/>
+                <Entry x:Name="EntradaViernes" Grid.Row="5" Grid.Column="1" Placeholder="08:00"/>
+                <Entry x:Name="SalidaViernes" Grid.Row="5" Grid.Column="2" Placeholder="16:00"/>
+                <CheckBox x:Name="LibreViernes" Grid.Row="5" Grid.Column="3" CheckedChanged="OnDiaLibreCheckedChanged"/>
+
+                <!-- Sábado -->
+                <Label Grid.Row="6" Text="Sábado"/>
+                <Entry x:Name="EntradaSabado" Grid.Row="6" Grid.Column="1" Placeholder="08:00"/>
+                <Entry x:Name="SalidaSabado" Grid.Row="6" Grid.Column="2" Placeholder="16:00"/>
+                <CheckBox x:Name="LibreSabado" Grid.Row="6" Grid.Column="3" CheckedChanged="OnDiaLibreCheckedChanged"/>
+
+                <!-- Domingo -->
+                <Label Grid.Row="7" Text="Domingo"/>
+                <Entry x:Name="EntradaDomingo" Grid.Row="7" Grid.Column="1" Placeholder="08:00"/>
+                <Entry x:Name="SalidaDomingo" Grid.Row="7" Grid.Column="2" Placeholder="16:00"/>
+                <CheckBox x:Name="LibreDomingo" Grid.Row="7" Grid.Column="3" CheckedChanged="OnDiaLibreCheckedChanged"/>
+            </Grid>
+
+            <Button Text="Guardar horario" Clicked="OnSaveClicked"/>
+
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

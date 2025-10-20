@@ -19,8 +19,8 @@ namespace PlanHora.Views
             if (local != null)
             {
                 NombreEntry.Text = local.Nombre;
-                AperturaEntry.Text = local.Apertura;
-                CierreEntry.Text = local.Cierre;
+                AperturaEntry.Text = local.HoraApertura;
+                CierreEntry.Text = local.HoraCierre;
             }
         }
 
@@ -33,8 +33,8 @@ namespace PlanHora.Views
             }
 
             _local.Nombre = NombreEntry.Text.Trim();
-            _local.Apertura = AperturaEntry.Text?.Trim() ?? "08:00";
-            _local.Cierre = CierreEntry.Text?.Trim() ?? "22:00";
+            _local.HoraApertura = AperturaEntry.Text?.Trim() ?? "08:00";
+            _local.HoraCierre = CierreEntry.Text?.Trim() ?? "22:00";
 
             await _db.SaveLocalAsync(_local);
             await DisplayAlert("Éxito", "Local guardado correctamente.", "OK");

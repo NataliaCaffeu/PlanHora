@@ -26,8 +26,13 @@
 
     <!-- Página de horarios -->
     <ShellContent 
-    Title="Horarios" 
-    Route="HorariosPage"
-    ContentTemplate="{DataTemplate views:HorariosPage}" />
+        Title="Horarios" 
+        Route="HorariosPage"
+        ContentTemplate="{DataTemplate views:HorariosPage}" />
 
+    <!-- Página de registro -->
+    <ShellContent
+        Title="Registro"
+        Route="RegisterPage"
+        ContentTemplate="{DataTemplate views:RegisterPage}" />
 </Shell>

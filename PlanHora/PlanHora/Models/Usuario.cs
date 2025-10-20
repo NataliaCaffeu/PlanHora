@@ -7,13 +7,12 @@ using System.Threading.Tasks;
 
 namespace PlanHora.Models
 {
-    public class Local
+    public class Usuario
     {
         [PrimaryKey, AutoIncrement]
         public int Id { get; set; }
 
-        public string Nombre { get; set; } = string.Empty;
-        public string HoraApertura { get; set; } = string.Empty;
-        public string HoraCierre { get; set; } = string.Empty;
+        public string NombreUsuario { get; set; }
+        public string Contrasena { get; set; }
     }
 }

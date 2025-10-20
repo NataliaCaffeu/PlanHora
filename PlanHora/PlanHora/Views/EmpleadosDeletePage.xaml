@@ -1,0 +1,28 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PlanHora.Views.EmpleadosDeletePage"
+             Title="Borrar Empleados">
+
+    <VerticalStackLayout Padding="20" Spacing="15">
+
+        <Label Text="Selecciona un local" FontAttributes="Bold"/>
+        <Picker x:Name="LocalPicker" Title="Seleccionar Local"
+                SelectedIndexChanged="OnLocalSelected"
+                ItemDisplayBinding="{Binding Nombre}"/>
+
+        <CollectionView x:Name="EmpleadosCollection"
+                        SelectionMode="None">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Grid Padding="10" ColumnDefinitions="*, Auto">
+                        <Label Text="{Binding Nombre}" VerticalOptions="Center"/>
+                        <Button Text="Borrar"
+                                Clicked="OnBorrarEmpleadoClicked"
+                                BindingContext="{Binding .}"/>
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+    </VerticalStackLayout>
+</ContentPage>

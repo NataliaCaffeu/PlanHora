@@ -7,6 +7,10 @@
         <Label Text="Bienvenido a PlanHora" FontSize="24" HorizontalOptions="Center" />
         <Entry x:Name="UsernameEntry" Placeholder="Usuario" />
         <Entry x:Name="PasswordEntry" Placeholder="Contraseña" IsPassword="True" />
-        <Button Text="Entrar" Clicked="OnLoginClicked" />
+        <Button Text="Iniciar sesión" Clicked="OnLoginClicked" />
+        <!-- Nuevo botón de registro -->
+        <Button Text="Registrarse" Clicked="OnRegisterClicked" />
+        <!-- botón para fase de desarollo para pruebas -->
+        <Button Text="Entrar sin registro" Clicked="OnSkipLoginClicked" />
     </VerticalStackLayout>
 </ContentPage>

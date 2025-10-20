@@ -68,6 +68,13 @@
 - [x] **12/10/2025** – Guardar horarios en la base de datos.
 - [x] **12/10/2025** – Visualizar horas asignadas en la interfaz.
 
+### Fase 5 – Cálculos automáticos, validaciones y mejora de la UI
+- [x] **16/10/2025** – Mejora de la UI
+- [ ] **20/10/2025 - Iniciado pero pendiente arreglar** – Cálculo de horas por día y por semana.
+- [ ] **20/10/2025 - Iniciado pero pendiente arreglar** – Validaciones: alertar si supera 9h/día o contrato semanal.
+- [x] **20/10/2025** – Mensajes de alerta (pop-ups o notificaciones en pantalla).
+- [x] **20/10/2025** – Testear
+
 ## Problemas encontrados y soluciones
 
 ##### Fase 1 y 2:
@@ -105,6 +112,17 @@ Advertencias XAML de bindings (Binding could be compiled to improve runtime perf
   - **Solución:** Se ajustaron los parámetros a object? sender, EventArgs? e para coincidir con la firma del delegado y evitar advertencias de compilación.
 - Duplicidad de claves al usar días como identificador
   - **Solución:** Se manejó un diccionario por día, evitando que se intenten agregar claves duplicadas (Key: Lunes) y garantizando que se actualicen los horarios existentes.
+##### Fase 5:
+- Navegación de SelectLocalPage a HorariosPage. Al seleccionar un local, la navegación no funcionaba y aparecía el error: Relative routing to shell elements is currently not supported.
+  - **Solución:** Se cambió la URI a ruta absoluta con ///HorariosPage?localId=ID y se eliminó la dependencia del LocalPicker en HorariosPage. Ahora la página recibe LocalId por query property.
+- EmpleadoFormPage con constructor de int. Se pasaba _localId como argumento, pero el constructor esperaba un objeto Empleado?.
+  - **Solución:** Unificar los constructores a uno que reciba un Empleado? y asignar _empleado.LocalId cuando se cree uno nuevo.
+- Frame estaba marcado como obsoleto en .NET 9.
+  - **Solución:** Se reemplazó Frame por Border con VerticalStackLayout dentro.
+- Validación de horarios en HorarioFormPage. Los horarios se guardaban como string y la comparación con TimeSpan fallaba (string was not recognized as a valid TimeSpan).
+  - **Solución:** Convertir los horarios de apertura, cierre y entradas/salidas usando TimeSpan.TryParseExact o TimeSpan.TryParse.
+- No se podían marcar días libres.
+  - **Solución:** Se añadió CheckBox por día y el evento OnDiaLibreCheckedChanged que limpia las entradas de ese día y lo excluye del cálculo de horas.
 
 ### Pruebas realizadas
 

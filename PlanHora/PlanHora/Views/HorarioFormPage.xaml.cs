@@ -55,20 +55,20 @@ namespace PlanHora.Views
         {
             try
             {
-                // Convertir apertura y cierre del local a TimeSpan
-                if (!TimeSpan.TryParse(_local.HoraApertura, out var apertura))
+                // Validar hora de apertura y cierre del local
+                if (!TryParseHoraSimple(_local.HoraApertura, out var apertura))
                 {
                     await DisplayAlert("Error", "Horario de apertura del local inválido.", "OK");
                     return;
                 }
 
-                if (!TimeSpan.TryParse(_local.HoraCierre, out var cierre))
+                if (!TryParseHoraSimple(_local.HoraCierre, out var cierre))
                 {
                     await DisplayAlert("Error", "Horario de cierre del local inválido.", "OK");
                     return;
                 }
 
-                // Diccionario para recorrer los días
+                // Diccionario con los días y sus controles
                 Dictionary<string, (Entry entrada, Entry salida, CheckBox libre)> dias = new()
                 {
                     { "Lunes", (EntradaLunes, SalidaLunes, LibreLunes) },
@@ -81,24 +81,26 @@ namespace PlanHora.Views
                 };
 
                 double horasTotales = 0;
+                var resumenDias = new List<string>();
 
                 foreach (var dia in dias)
                 {
                     if (dia.Value.libre.IsChecked)
                     {
                         SetHorarioDia(dia.Key, "", "");
+                        resumenDias.Add($"{dia.Key}: Libre");
                         continue;
                     }
 
-                    if (!TimeSpan.TryParse(dia.Value.entrada.Text, out var entrada))
+                    if (!TryParseHoraSimple(dia.Value.entrada.Text, out var entrada))
                     {
-                        await DisplayAlert("Error", $"Entrada inválida para {dia.Key}", "OK");
+                        await DisplayAlert("Error", $"Entrada inválida para {dia.Key}. Usa formato HH:mm o simplemente la hora (ej: 9 o 9:30)", "OK");
                         return;
                     }
 
-                    if (!TimeSpan.TryParse(dia.Value.salida.Text, out var salida))
+                    if (!TryParseHoraSimple(dia.Value.salida.Text, out var salida))
                     {
-                        await DisplayAlert("Error", $"Salida inválida para {dia.Key}", "OK");
+                        await DisplayAlert("Error", $"Salida inválida para {dia.Key}. Usa formato HH:mm o simplemente la hora (ej: 17 o 17:30)", "OK");
                         return;
                     }
 
@@ -110,13 +112,13 @@ namespace PlanHora.Views
 
                     if (entrada < apertura)
                     {
-                        await DisplayAlert("Error", $"La entrada de {dia.Key} no puede ser antes de la apertura del local", "OK");
+                        await DisplayAlert("Error", $"La entrada de {dia.Key} no puede ser antes de la apertura del local.", "OK");
                         return;
                     }
 
                     if (salida > cierre)
                     {
-                        await DisplayAlert("Error", $"La salida de {dia.Key} no puede ser después del cierre del local", "OK");
+                        await DisplayAlert("Error", $"La salida de {dia.Key} no puede ser después del cierre del local.", "OK");
                         return;
                     }
 
@@ -124,29 +126,90 @@ namespace PlanHora.Views
 
                     if (horasDia > 9)
                     {
-                        await DisplayAlert("Error", $"No se pueden trabajar más de 9 horas en {dia.Key}", "OK");
+                        await DisplayAlert("Error", $"No se pueden trabajar más de 9 horas en {dia.Key}.", "OK");
                         return;
                     }
 
                     horasTotales += horasDia;
+                    resumenDias.Add($"{dia.Key}: {horasDia:F1}h");
 
                     SetHorarioDia(dia.Key, dia.Value.entrada.Text, dia.Value.salida.Text);
                 }
 
-                if (horasTotales > _empleado.JornadaSemanal)
+                // Validar que al menos un día tenga horario
+                bool tieneHorarios = dias.Any(d =>
+                    !string.IsNullOrWhiteSpace(d.Value.entrada.Text) &&
+                    !string.IsNullOrWhiteSpace(d.Value.salida.Text) &&
+                    !d.Value.libre.IsChecked);
+
+                if (!tieneHorarios)
                 {
-                    await DisplayAlert("Error", $"La jornada total ({horasTotales}h) excede la jornada semanal del empleado ({_empleado.JornadaSemanal}h).", "OK");
+                    await DisplayAlert("Aviso", "No se puede guardar un horario vacío. Ingresa al menos un día trabajado.", "OK");
                     return;
                 }
 
-                await _db.SaveHorarioAsync(_horario);
-                await DisplayAlert("Éxito", "Horario guardado correctamente", "OK");
+                // Validar jornada semanal
+                if (horasTotales > _empleado.JornadaSemanal)
+                {
+                    await DisplayAlert("Error", $"La jornada total ({horasTotales:F1}h) excede la jornada semanal del empleado ({_empleado.JornadaSemanal}h).", "OK");
+                    return;
+                }
+
+                // Verificar si ya existe un horario para este empleado y local
+                var horarios = await _db.GetHorariosAsync();
+                var existente = horarios.FirstOrDefault(h => h.EmpleadoId == _empleado.Id && h.LocalId == _local.Id);
+
+                if (existente != null)
+                {
+                    // Sobrescribir el existente
+                    _horario.Id = existente.Id;
+                    await _db.SaveHorarioAsync(_horario); // tu SaveHorarioAsync hace Insert o Update según Id
+                }
+                else
+                {
+                    await _db.SaveHorarioAsync(_horario);
+                }
+
+                // Mostrar resumen
+                string resumen = string.Join(" — ", resumenDias);
+                await DisplayAlert(
+                    "Éxito",
+                    $"Horario guardado correctamente.\n\nTotal semanal: {horasTotales:F1}h\n\n{resumen}",
+                    "OK"
+                );
+
+                //await DisplayAlert("Éxito", "Horario guardado correctamente.", "OK");
+
                 await Navigation.PopAsync();
             }
             catch (Exception ex)
             {
                 await DisplayAlert("Error", $"Ocurrió un error: {ex.Message}", "OK");
             }
+        }
+
+        // Función para convertir la hora en distintos formatos válidos
+        private bool TryParseHoraSimple(string? texto, out TimeSpan hora)
+        {
+            hora = default;
+
+            if (string.IsNullOrWhiteSpace(texto))
+                return false;
+
+            texto = texto.Trim();
+
+            // Si pone solo "9" - 09:00
+            if (int.TryParse(texto, out int h) && h >= 0 && h < 24)
+            {
+                hora = new TimeSpan(h, 0, 0);
+                return true;
+            }
+
+            // Si pone "9:30" o "09:30"
+            if (TimeSpan.TryParseExact(texto, new[] { "h\\:mm", "hh\\:mm" }, CultureInfo.InvariantCulture, out hora))
+                return true;
+
+            return false;
         }
 
         private void SetHorarioDia(string dia, string entrada, string salida)

@@ -1,9 +1,17 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:converters="clr-namespace:PlanHora.Converters"
              x:Class="PlanHora.Views.HorariosPage"
              Title="Horarios">
 
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:BoolToLibreConverter x:Key="BoolToLibreConverter"/>
+            <converters:HorarioFormatterConverter x:Key="HorarioFormatterConverter"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    
     <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="15">
 
@@ -25,18 +33,13 @@
             <CollectionView x:Name="HorariosCollectionView">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <Border Stroke="LightGray"
-                            StrokeThickness="1"
-                            Padding="10"
-                            Margin="5"
-                            StrokeShape="RoundRectangle 10">
+                        <Border Stroke="LightGray" StrokeThickness="1" Padding="10" Margin="5" StrokeShape="RoundRectangle 10">
                             <VerticalStackLayout>
-                                <Label Text="{Binding DiaSemana}" FontAttributes="Bold" />
-                                <Label Text="{Binding HoraEntrada}" />
-                                <Label Text="{Binding HoraSalida}" />
+                                <Label Text="{Binding DiaSemana}" FontAttributes="Bold"/>
+                                <Label Text="{Binding EsLibre, Converter={StaticResource BoolToLibreConverter}}"/>
+                                <Label Text="{Binding ., Converter={StaticResource HorarioFormatterConverter}}"/>
                             </VerticalStackLayout>
                         </Border>
-
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>

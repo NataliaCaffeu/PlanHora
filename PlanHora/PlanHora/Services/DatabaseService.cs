@@ -38,6 +38,7 @@ namespace PlanHora.Services
         public Task<List<Horario>> GetHorariosAsync() => _db.Table<Horario>().ToListAsync();
         public Task<int> SaveHorarioAsync(Horario horario) =>
             horario.Id == 0 ? _db.InsertAsync(horario) : _db.UpdateAsync(horario);
+       
 
         // Métodos para Festivo
         public Task<List<Festivo>> GetFestivosAsync() => _db.Table<Festivo>().ToListAsync();

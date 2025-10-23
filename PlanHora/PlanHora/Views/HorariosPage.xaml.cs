@@ -102,9 +102,38 @@ namespace PlanHora.Views
         private async Task CargarHorariosAsync(int empleadoId)
         {
             var horarios = await _db.GetHorariosAsync();
-            HorariosCollectionView.ItemsSource = horarios
-                .Where(h => h.EmpleadoId == empleadoId)
-                .ToList();
+            var horarioEmpleado = horarios.FirstOrDefault(h => h.EmpleadoId == empleadoId);
+
+            if (horarioEmpleado == null)
+            {
+                HorariosCollectionView.ItemsSource = null;
+                return;
+            }
+
+            var items = new List<HorarioDia>
+            {
+                new HorarioDia { DiaSemana = "Lunes", HoraEntrada = horarioEmpleado.LunesEntrada, HoraSalida = horarioEmpleado.LunesSalida, EsLibre = string.IsNullOrEmpty(horarioEmpleado.LunesEntrada) && string.IsNullOrEmpty(horarioEmpleado.LunesSalida) },
+                new HorarioDia { DiaSemana = "Martes", HoraEntrada = horarioEmpleado.MartesEntrada, HoraSalida = horarioEmpleado.MartesSalida, EsLibre = string.IsNullOrEmpty(horarioEmpleado.MartesEntrada) && string.IsNullOrEmpty(horarioEmpleado.MartesSalida) },
+                new HorarioDia { DiaSemana = "Miércoles", HoraEntrada = horarioEmpleado.MiercolesEntrada, HoraSalida = horarioEmpleado.MiercolesSalida, EsLibre = string.IsNullOrEmpty(horarioEmpleado.MiercolesEntrada) && string.IsNullOrEmpty(horarioEmpleado.MiercolesSalida) },
+                new HorarioDia { DiaSemana = "Jueves", HoraEntrada = horarioEmpleado.JuevesEntrada, HoraSalida = horarioEmpleado.JuevesSalida, EsLibre = string.IsNullOrEmpty(horarioEmpleado.JuevesEntrada) && string.IsNullOrEmpty(horarioEmpleado.JuevesSalida) },
+                new HorarioDia { DiaSemana = "Viernes", HoraEntrada = horarioEmpleado.ViernesEntrada, HoraSalida = horarioEmpleado.ViernesSalida, EsLibre = string.IsNullOrEmpty(horarioEmpleado.ViernesEntrada) && string.IsNullOrEmpty(horarioEmpleado.ViernesSalida) },
+                new HorarioDia { DiaSemana = "Sábado", HoraEntrada = horarioEmpleado.SabadoEntrada, HoraSalida = horarioEmpleado.SabadoSalida, EsLibre = string.IsNullOrEmpty(horarioEmpleado.SabadoEntrada) && string.IsNullOrEmpty(horarioEmpleado.SabadoSalida) },
+                new HorarioDia { DiaSemana = "Domingo", HoraEntrada = horarioEmpleado.DomingoEntrada, HoraSalida = horarioEmpleado.DomingoSalida, EsLibre = string.IsNullOrEmpty(horarioEmpleado.DomingoEntrada) && string.IsNullOrEmpty(horarioEmpleado.DomingoSalida) },
+            };
+
+
+            HorariosCollectionView.ItemsSource = items.ToList();
+
         }
+
+    }
+
+    public class HorarioDia
+    {
+        public string DiaSemana { get; set; } = string.Empty;
+        public string HoraEntrada { get; set; } = string.Empty;
+        public string HoraSalida { get; set; } = string.Empty;
+        public bool EsLibre { get; set; } = false;
+
     }
 }

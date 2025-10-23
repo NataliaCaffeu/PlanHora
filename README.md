@@ -70,8 +70,8 @@
 
 ### Fase 5 – Cálculos automáticos, validaciones y mejora de la UI
 - [x] **16/10/2025** – Mejora de la UI
-- [ ] **20/10/2025 - Iniciado pero pendiente arreglar** – Cálculo de horas por día y por semana.
-- [ ] **20/10/2025 - Iniciado pero pendiente arreglar** – Validaciones: alertar si supera 9h/día o contrato semanal.
+- [x] **20/10/2025 - finalizado 23/10/2025** – Cálculo de horas por día y por semana.
+- [x] **20/10/2025 - finalizado 23/10/2025** – Validaciones: alertar si supera 9h/día o contrato semanal.
 - [x] **20/10/2025** – Mensajes de alerta (pop-ups o notificaciones en pantalla).
 - [x] **20/10/2025** – Testear
 
@@ -123,6 +123,18 @@ Advertencias XAML de bindings (Binding could be compiled to improve runtime perf
   - **Solución:** Convertir los horarios de apertura, cierre y entradas/salidas usando TimeSpan.TryParseExact o TimeSpan.TryParse.
 - No se podían marcar días libres.
   - **Solución:** Se añadió CheckBox por día y el evento OnDiaLibreCheckedChanged que limpia las entradas de ese día y lo excluye del cálculo de horas.
+- Validación de horas de entrada y salida: Al guardar horarios, la aplicación daba errores de string was not recognized as a valid TimeSpan o consideraba incorrectas horas válidas.
+  - **Solución:** Implementamos TryParseHoraSimple que permite formatos flexibles como 9, 9:00 o 9:30. Esto evita errores de conversión y permite media hora (:30) en la jornada.
+- Validación de 9 horas diarias: Aunque el usuario ingresaba menos de 9 horas, la aplicación alertaba que excedía 9 horas.
+  - **Solución:** Ajustamos el cálculo de horasDia usando TimeSpan.TotalHours y aseguramos que se compare correctamente con el límite de 9 horas, considerando también los días libres.
+- Actualización de horarios existentes: Al guardar un horario para un empleado que ya tenía uno, la aplicación creaba un duplicado y no se mostraba correctamente.
+  - **Solución:** Antes de guardar, se busco si ya existe un horario para ese empleado y local. Si existe, sobrescribimos el registro usando el mismo Id para que SaveHorarioAsync haga un Update en lugar de Insert.
+- Cuadrado blanco en HorariosPage: Después de guardar un horario, aparecía un cuadrado blanco en la CollectionView. Se estaba mostrando un HorarioDia vacío por no filtrar correctamente los días libres.
+  - **Solución:** Creamos la clase HorarioDia con una propiedad EsLibre y eliminamos el filtrado que ocultaba días sin horario. Ahora los días libres se muestran correctamente.
+- Mostrar días libres: Los días marcados como libres no se mostraban en la CollectionView.
+  - **Solución:** Añadimos la propiedad EsLibre a HorarioDia. Creamos un BoolToLibreConverter que convierte true en "Libre". Asignamos todos los días al ItemsSource y usamos el converter en el XAML para mostrar "Libre" cuando corresponde.
+- Formato de horas en CollectionView: Los horarios aparecían como 12 / 16 sin contexto.
+  - **Solución:** Creamos HorarioFormatterConverter para mostrar los datos com una descrpcion de que significaban.
 
 ### Pruebas realizadas
 
@@ -154,7 +166,12 @@ Advertencias XAML de bindings (Binding could be compiled to improve runtime perf
 - Almacenar datos locales en .NET MAUI
 - Apuntes asignatura de Servicios en el segundo ciclo de DAM.
 - Herramientas de asistencia con IA (ChatGPT, GitHub Copilot)
-
+##### Fase 5:
+- Documentación de Microsoft MAUI – Data Binding y Converters [https://learn.microsoft.com/en-us/dotnet/maui/fundamentals/data-binding]
+- TimeSpan.Parse / TryParse – Microsoft Docs: TimeSpan.Parse: [https://learn.microsoft.com/en-us/dotnet/api/system.timespan.parse?view=net-9.0]
+- SQLite-net ORM – GitHub: sqlite-net: [https://github.com/praeclarum/sqlite-net?]
+- Herramientas de asistencia con IA (ChatGPT, GitHub Copilot, Claude)
+  
 ##  Consideraciones y aprendizajes
 
 ### Fase 1 y 2: 
@@ -179,6 +196,14 @@ Afirmando los conocimientos adquiridos mientras se cursaba la disciplina de serv
 Se utilizaron para manejar eventos de la interfaz, como la selección de un empleado en el Picker. Gracias a los delegados, podemos ejecutar automáticamente la lógica de carga de horarios cuando el usuario cambia la selección, manteniendo la UI reactiva y desacoplada de la lógica de negocio.
 ##### Por qué se utilizo el Dictionary
 Se implementó para organizar los horarios por día de la semana de manera eficiente. Esto permite actualizar o acceder a un horario específico sin riesgo de duplicados, simplificando la gestión y sincronización de los datos entre la base de datos y la interfaz.
+
+### Fase 5
+Para mejorar la legibilidad del CollectionView en la página de horarios, se decidió dar formato a las etiquetas de entrada y salida y también mostrar explícitamente los días libres.Para eso se utilizo el IValueConverter.
+##### Por qué se utilizo IValueConverter
+Son una tecnología de MAUI/XAML que permite transformar los datos del modelo antes de mostrarlos en la interfaz, sin alterar los datos originales. Estos conversores permiten presentar la información de manera clara y consistente, mejorando la experiencia del usuario sin modificar la lógica de negocio.
+##### Ejemplos en el proyecto:
+BoolToLibreConverter: Convierte un booleano indicando si un día es libre en el texto "Libre" para mostrarlo en la UI.
+HorarioFormatterConverter: Da formato a las horas de entrada y salida para que se vean como "Entrada - 09:00 / Salida - 17:00".
   
 ---
 

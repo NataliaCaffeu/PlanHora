@@ -5,6 +5,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Maui.ApplicationModel.DataTransfer;
+
 
 namespace PlanHora.Views
 {
@@ -126,14 +128,54 @@ namespace PlanHora.Views
 
         }
 
+        private async void OnExportarPdfClicked(object sender, EventArgs e)
+        {
+            if (EmpleadoPicker.SelectedItem is not Empleado empleado)
+            {
+                await DisplayAlert("Error", "Debes seleccionar un empleado antes de exportar.", "OK");
+                return;
+            }
+
+            if (HorariosCollectionView.ItemsSource is not IEnumerable<HorarioDia> enumerableHorarios)
+            {
+                await DisplayAlert("Error", "No hay horarios cargados para exportar.", "OK");
+                return;
+            }
+
+            var horarios = enumerableHorarios.ToList();
+            if (!horarios.Any())
+            {
+                await DisplayAlert("Error", "No hay horarios cargados para exportar.", "OK");
+                return;
+            }
+
+            if (_localSeleccionado == null)
+            {
+                await DisplayAlert("Error", "No se ha cargado el local.", "OK");
+                return;
+            }
+
+            try
+            {
+                var pdfService = new PdfService();
+                var shareService = new ShareService();
+
+                string pdfPath = await pdfService.GenerarCuadranteEmpleadoAsync(
+                    empleado.Nombre,
+                    horarios,
+                    _localSeleccionado.Nombre
+                );
+
+                await shareService.CompartirArchivoAsync(pdfPath);
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Error", $"No se pudo generar el PDF:\n{ex.Message}", "OK");
+            }
+        }
+
+
     }
 
-    public class HorarioDia
-    {
-        public string DiaSemana { get; set; } = string.Empty;
-        public string HoraEntrada { get; set; } = string.Empty;
-        public string HoraSalida { get; set; } = string.Empty;
-        public bool EsLibre { get; set; } = false;
 
-    }
 }

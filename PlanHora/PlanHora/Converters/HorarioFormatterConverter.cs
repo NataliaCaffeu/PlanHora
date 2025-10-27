@@ -2,6 +2,8 @@
 using System.Globalization;
 using Microsoft.Maui.Controls;
 using PlanHora.Views;
+using PlanHora.Models;
+
 
 namespace PlanHora.Converters
 {

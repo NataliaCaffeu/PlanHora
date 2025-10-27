@@ -225,5 +225,7 @@ namespace PlanHora.Views
                 case "Domingo": _horario.DomingoEntrada = entrada; _horario.DomingoSalida = salida; break;
             }
         }
+
+
     }
 }

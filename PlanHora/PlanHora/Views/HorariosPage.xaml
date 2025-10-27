@@ -45,7 +45,8 @@
             </CollectionView>
 
             <Button Text="Agregar Horario" Clicked="OnAddHorarioClicked" />
-
+            <Button Text="Exportar y Compartir PDF" Clicked="OnExportarPdfClicked" />
+            
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

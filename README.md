@@ -75,6 +75,11 @@
 - [x] **20/10/2025** – Mensajes de alerta (pop-ups o notificaciones en pantalla).
 - [x] **20/10/2025** – Testear
 
+### Fase 6 – Exportación y compartir
+- [x] **Iniciado 27/10/2025 - Falta finalizar** – Generar PDF con el cuadrante semanal.
+- [x] **Iniciado 27/10/2025 - Falta finalizar** – Integrar función de compartir (correo, WhatsApp, etc.).
+- [ ]  Verificar formato y legibilidad del PDF.
+
 ## Problemas encontrados y soluciones
 
 ##### Fase 1 y 2:
@@ -135,6 +140,9 @@ Advertencias XAML de bindings (Binding could be compiled to improve runtime perf
   - **Solución:** Añadimos la propiedad EsLibre a HorarioDia. Creamos un BoolToLibreConverter que convierte true en "Libre". Asignamos todos los días al ItemsSource y usamos el converter en el XAML para mostrar "Libre" cuando corresponde.
 - Formato de horas en CollectionView: Los horarios aparecían como 12 / 16 sin contexto.
   - **Solución:** Creamos HorarioFormatterConverter para mostrar los datos com una descrpcion de que significaban.
+##### Fase 6:
+- Error QuestPDF no pudo inicializarse en tiempo de ejecución. Causa investigada: QuestPDF depende de librerías de Windows Desktop (GDI, System.Drawing) que no existen en Android ni iOS. Por eso, aunque compile, al ejecutar en móvil falla.
+- **Solución por implementar:** No usar QuestPDF en Android/iOS, porque no es compatible. Usar una librería que funcione en MAUI Mobile, por ejemplo: PdfSharpCore + SkiaSharp → gratuita y multiplataforma. O como alternativa: generar el PDF en un servidor externo y descargarlo en el móvil. 
 
 ### Pruebas realizadas
 

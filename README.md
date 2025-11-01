@@ -76,9 +76,9 @@
 - [x] **20/10/2025** – Testear
 
 ### Fase 6 – Exportación y compartir
-- [x] **Iniciado 27/10/2025 - Falta finalizar** – Generar PDF con el cuadrante semanal.
-- [x] **Iniciado 27/10/2025 - Falta finalizar** – Integrar función de compartir (correo, WhatsApp, etc.).
-- [ ]  Verificar formato y legibilidad del PDF.
+- [x] **Iniciado 27/10/2025 - Finalizado 01/11/2025** – Generar PDF con el cuadrante semanal.
+- [x] **Iniciado 27/10/2025 - Finalizado 01/11/2025** – Integrar función de compartir (correo, WhatsApp, etc.).
+- [x] **01/11/2025** - Verificar formato y legibilidad del PDF.
 
 ## Problemas encontrados y soluciones
 
@@ -142,7 +142,7 @@ Advertencias XAML de bindings (Binding could be compiled to improve runtime perf
   - **Solución:** Creamos HorarioFormatterConverter para mostrar los datos com una descrpcion de que significaban.
 ##### Fase 6:
 - Error QuestPDF no pudo inicializarse en tiempo de ejecución. Causa investigada: QuestPDF depende de librerías de Windows Desktop (GDI, System.Drawing) que no existen en Android ni iOS. Por eso, aunque compile, al ejecutar en móvil falla.
-- **Solución por implementar:** No usar QuestPDF en Android/iOS, porque no es compatible. Usar una librería que funcione en MAUI Mobile, por ejemplo: PdfSharpCore + SkiaSharp → gratuita y multiplataforma. O como alternativa: generar el PDF en un servidor externo y descargarlo en el móvil. 
+- **Solución:** No usar QuestPDF en Android/iOS, porque no es compatible. Usar una librería que funcione en MAUI Mobile, la que se esta utilizando es SkiaSharp y SkiaSharp.Views.Maui.Controls.Compatibility. 
 
 ### Pruebas realizadas
 
@@ -179,6 +179,10 @@ Advertencias XAML de bindings (Binding could be compiled to improve runtime perf
 - TimeSpan.Parse / TryParse – Microsoft Docs: TimeSpan.Parse: [https://learn.microsoft.com/en-us/dotnet/api/system.timespan.parse?view=net-9.0]
 - SQLite-net ORM – GitHub: sqlite-net: [https://github.com/praeclarum/sqlite-net?]
 - Herramientas de asistencia con IA (ChatGPT, GitHub Copilot, Claude)
+##### Fase 6:
+- Sitio oficial SkiaSharp Docs: [https://learn.microsoft.com/en-us/previous-versions/xamarin/xamarin-forms/user-interface/graphics/skiasharp/]
+- GitHub SkiaSharp: [https://github.com/mono/SkiaSharp]
+- Herramientas de asistencia con IA (ChatGPT, GitHub Copilot, Tabnine)
   
 ##  Consideraciones y aprendizajes
 
@@ -212,7 +216,15 @@ Son una tecnología de MAUI/XAML que permite transformar los datos del modelo an
 ##### Ejemplos en el proyecto:
 BoolToLibreConverter: Convierte un booleano indicando si un día es libre en el texto "Libre" para mostrarlo en la UI.
 HorarioFormatterConverter: Da formato a las horas de entrada y salida para que se vean como "Entrada - 09:00 / Salida - 17:00".
-  
+
+### Fase 6
+Se intentó usar QuestPDF para generar los cuadrantes semanales, pero se descubrió que no es compatible con .NET MAUI y solo funciona en entornos de escritorio. Al ejecutar la app, aparecían errores de inicialización de fuentes y el PDF no se generaba correctamente.
+##### Por qué se utilizo SkiaSharp
+Buscando una solución compatible con MAUI, se optó por SkiaSharp, lo que permitió generar PDFs de manera confiable y compartirlos desde dispositivos móviles usando Share.Default.
+También se aprendió a manejar correctamente la ubicación de los archivos usando FileSystem.CacheDirectory, asegurando que los PDFs se puedan compartir sin necesidad de permisos de almacenamiento adicionales.
+##### Por qué se utilizo SkiaSharp.Views.Maui.Controls.Compatibility
+SkiaSharp contiene solo la lógica de dibujo básica (clases SKCanvas, SKPaint, etc.), SkiaSharp.Views.Maui.Controls.Compatibility agrega adaptadores y bindings para que estas clases funcionen dentro de MAUI XAML y controles nativos, asegurando compatibilidad multiplataforma. Asi que Se añade SkiaSharp.Views.Maui.Controls.Compatibility para que se pueda dibujar el PDF correctamente en MAUI, evitando errores de inicialización de fuentes y gráficos en Android/iOS/Windows.
+
 ---
 
 ### Autora

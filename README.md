@@ -80,6 +80,11 @@
 - [x] **Iniciado 27/10/2025 - Finalizado 01/11/2025** – Integrar función de compartir (correo, WhatsApp, etc.).
 - [x] **01/11/2025** - Verificar formato y legibilidad del PDF.
 
+### Fase 7 – Extras y pulido
+ - [x] **08/11/2025** - Revisión de UX (diseño, usabilidad).
+ - [x] **08/11/2025** - Corregir y habilitar pantalla de registro y login.
+ - [x] **08/11/2025** - Revisar errores y corregir bugs.
+
 ## Problemas encontrados y soluciones
 
 ##### Fase 1 y 2:
@@ -183,6 +188,9 @@ Advertencias XAML de bindings (Binding could be compiled to improve runtime perf
 - Sitio oficial SkiaSharp Docs: [https://learn.microsoft.com/en-us/previous-versions/xamarin/xamarin-forms/user-interface/graphics/skiasharp/]
 - GitHub SkiaSharp: [https://github.com/mono/SkiaSharp]
 - Herramientas de asistencia con IA (ChatGPT, GitHub Copilot, Tabnine)
+##### Fase 7:
+- Documentación oficial de .NET MAUI en Microsoft Learn
+- Herramientas de asistencia con IA (ChatGPT, GitHub Copilot)
   
 ##  Consideraciones y aprendizajes
 

@@ -26,7 +26,7 @@ namespace PlanHora.Views
         private async void OnDeleteEmpleadoClicked(object sender, EventArgs e)
         {
             // Obtener locales
-            var locales = await _db.GetLocalesAsync();
+            var locales = await _db.GetLocalesPorUsuarioAsync(SessionService.UsuarioActual.Id);
             if (!locales.Any())
             {
                 await DisplayAlert("Error", "No hay locales registrados.", "OK");
@@ -43,7 +43,7 @@ namespace PlanHora.Views
             var localSeleccionado = locales.First(l => l.Nombre == seleccionado);
 
             // Obtener empleados de ese local
-            var empleados = (await _db.GetEmpleadosAsync()).Where(emp => emp.LocalId == localSeleccionado.Id).ToList();
+            var empleados = (await _db.GetEmpleadosPorUsuarioAsync(SessionService.UsuarioActual.Id)).Where(emp => emp.LocalId == localSeleccionado.Id).ToList();
             if (!empleados.Any())
             {
                 await DisplayAlert("Aviso", "No hay empleados en este local.", "OK");
@@ -58,7 +58,7 @@ namespace PlanHora.Views
 
                 if (borrar)
                 {
-                    await _db.SaveEmpleadoAsync(new Empleado { Id = empleado.Id }); // Aquí cambiaríamos a Delete
+                    await _db.DeleteEmpleadoAsync(empleado);
                 }
             }
         }

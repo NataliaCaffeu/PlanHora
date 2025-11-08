@@ -71,6 +71,13 @@ namespace PlanHora.Views
 
         private async void OnAddHorarioClicked(object sender, EventArgs e)
         {
+            var button = sender as Button;
+            if (button != null)
+            {
+                await button.ScaleTo(1.1, 100); // escala al 110% en 100ms
+                await button.ScaleTo(1.0, 100); // vuelve a tamaño original
+            }
+
             if (EmpleadoPicker.SelectedItem is not Empleado empleadoSeleccionado)
             {
                 await DisplayAlert("Error", "Debes seleccionar un empleado antes de agregar horarios.", "OK");

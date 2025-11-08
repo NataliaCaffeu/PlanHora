@@ -17,5 +17,7 @@ namespace PlanHora.Models
         public int LocalId { get; set; }
         public int JornadaSemanal { get; set; }
         public string? Observaciones { get; set; }
+        public int UsuarioId { get; set; }
+
     }
 }

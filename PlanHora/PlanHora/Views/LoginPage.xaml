@@ -11,6 +11,6 @@
         <!-- Nuevo botón de registro -->
         <Button Text="Registrarse" Clicked="OnRegisterClicked" />
         <!-- botón para fase de desarollo para pruebas -->
-        <Button Text="Entrar sin registro" Clicked="OnSkipLoginClicked" />
+        <!-- <Button Text="Entrar sin registro" Clicked="OnSkipLoginClicked" />-->
     </VerticalStackLayout>
 </ContentPage>

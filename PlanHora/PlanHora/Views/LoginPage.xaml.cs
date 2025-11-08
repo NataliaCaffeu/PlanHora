@@ -19,6 +19,7 @@ namespace PlanHora.Views
 
             if (usuario != null)
             {
+                SessionService.IniciarSesion(usuario);
                 await DisplayAlert("Bienvenido", $"Hola {usuario.NombreUsuario}!", "OK");
                 await Shell.Current.GoToAsync("//SelectLocalPage");
                 UsernameEntry.Text = string.Empty;
@@ -35,12 +36,13 @@ namespace PlanHora.Views
             await Shell.Current.GoToAsync("//RegisterPage");
         }
 
-        private async void OnSkipLoginClicked(object sender, EventArgs e)
-        {
-            // Entrada libre para pruebas
-            await Shell.Current.GoToAsync("//SelectLocalPage");
-            UsernameEntry.Text = string.Empty;
-            PasswordEntry.Text = string.Empty;
-        }
+        //funcion del boton usado para pruebas
+        //private async void OnSkipLoginClicked(object sender, EventArgs e)
+        //{
+        //    // Entrada libre para pruebas
+        //    await Shell.Current.GoToAsync("//SelectLocalPage");
+        //    UsernameEntry.Text = string.Empty;
+        //    PasswordEntry.Text = string.Empty;
+        //}
     }
 }

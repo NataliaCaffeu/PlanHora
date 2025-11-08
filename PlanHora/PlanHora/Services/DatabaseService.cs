@@ -28,11 +28,38 @@ namespace PlanHora.Services
         public Task<List<Local>> GetLocalesAsync() => _db.Table<Local>().ToListAsync();
         public Task<int> SaveLocalAsync(Local local) =>
             local.Id == 0 ? _db.InsertAsync(local) : _db.UpdateAsync(local);
+        public Task<List<Local>> GetLocalesPorUsuarioAsync(int usuarioId) =>
+            _db.Table<Local>().Where(l => l.UsuarioId == usuarioId).ToListAsync();
+
+        public async Task<int> DeleteLocalAsync(Local local)
+        {
+            // Obtener los empleados asociados al local
+            var empleados = await _db.Table<Empleado>().Where(e => e.LocalId == local.Id).ToListAsync();
+
+            // Obtener los IDs de los empleados para borrar sus horarios
+            var empleadoIds = empleados.Select(e => e.Id).ToList();
+
+            // Borrar los horarios de esos empleados
+            var horarios = await _db.Table<Horario>().Where(h => empleadoIds.Contains(h.EmpleadoId)).ToListAsync();
+            foreach (var h in horarios)
+                await _db.DeleteAsync(h);
+
+            // Borrar empleados asociados
+            foreach (var emp in empleados)
+                await _db.DeleteAsync(emp);
+
+            // borrar el local
+            return await _db.DeleteAsync(local);
+        }
+
 
         // Métodos para Empleado
         public Task<List<Empleado>> GetEmpleadosAsync() => _db.Table<Empleado>().ToListAsync();
         public Task<int> SaveEmpleadoAsync(Empleado empleado) =>
             empleado.Id == 0 ? _db.InsertAsync(empleado) : _db.UpdateAsync(empleado);
+        public Task<List<Empleado>> GetEmpleadosPorUsuarioAsync(int usuarioId) =>
+            _db.Table<Empleado>().Where(e => e.UsuarioId == usuarioId).ToListAsync();
+
 
         // Métodos para Horario
         public Task<List<Horario>> GetHorariosAsync() => _db.Table<Horario>().ToListAsync();

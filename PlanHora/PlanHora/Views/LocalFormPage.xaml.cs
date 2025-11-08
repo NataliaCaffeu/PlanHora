@@ -35,6 +35,7 @@ namespace PlanHora.Views
             _local.Nombre = NombreEntry.Text.Trim();
             _local.HoraApertura = AperturaEntry.Text?.Trim() ?? "08:00";
             _local.HoraCierre = CierreEntry.Text?.Trim() ?? "22:00";
+            _local.UsuarioId = SessionService.UsuarioActual.Id;
 
             await _db.SaveLocalAsync(_local);
             await DisplayAlert("Éxito", "Local guardado correctamente.", "OK");

@@ -15,5 +15,7 @@ namespace PlanHora.Models
         public string Nombre { get; set; } = string.Empty;
         public string HoraApertura { get; set; } = string.Empty;
         public string HoraCierre { get; set; } = string.Empty;
+        public int UsuarioId { get; set; }
+
     }
 }

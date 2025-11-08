@@ -33,10 +33,16 @@ namespace PlanHora.Views
                 Contrasena = contrasena
             };
 
-            await _db.SaveUsuarioAsync(nuevoUsuario);
-
-            await DisplayAlert("Éxito", "Usuario registrado correctamente.", "OK");
-            await Shell.Current.GoToAsync("//LoginPage");
+            try
+            {
+                await _db.SaveUsuarioAsync(nuevoUsuario);
+                await DisplayAlert("Éxito", "Usuario registrado correctamente.", "OK");
+                await Shell.Current.GoToAsync("//LoginPage");
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Error", ex.Message, "OK");
+            }
 
         }
     }

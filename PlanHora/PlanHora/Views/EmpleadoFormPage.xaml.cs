@@ -39,7 +39,7 @@ namespace PlanHora.Views
 
         private async Task CargarLocalesAsync()
         {
-            _locales = await _db.GetLocalesAsync();
+            _locales = await _db.GetLocalesPorUsuarioAsync(SessionService.UsuarioActual.Id);
             LocalPicker.ItemsSource = _locales;
 
             // Si es edición, seleccionar el local correspondiente
@@ -77,6 +77,7 @@ namespace PlanHora.Views
             _empleado.Puesto = PuestoEntry.Text?.Trim() ?? "";
             _empleado.JornadaSemanal = jornada;
             _empleado.LocalId = localSeleccionado.Id;
+            _empleado.UsuarioId = SessionService.UsuarioActual.Id;
 
             // Guardar en la base de datos
             await _db.SaveEmpleadoAsync(_empleado);

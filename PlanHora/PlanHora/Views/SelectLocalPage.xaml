@@ -16,5 +16,7 @@
                 SelectedIndexChanged="OnLocalSelected" />
 
         <Button Text="Agregar Local" Clicked="OnAddLocalClicked" />
+        <Button x:Name="DeleteLocalButton" Text="Borrar Local" Clicked="OnDeleteLocalClicked"/>
+        <Button Text="Empleados" Clicked="OnVerEmpleadosClicked" />
     </VerticalStackLayout>
 </ContentPage>

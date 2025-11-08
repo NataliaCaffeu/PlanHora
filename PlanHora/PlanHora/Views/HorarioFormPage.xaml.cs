@@ -1,3 +1,4 @@
+using CommunityToolkit.Maui.Views;
 using Microsoft.Maui.Controls;
 using PlanHora.Models;
 using PlanHora.Services;
@@ -147,6 +148,36 @@ namespace PlanHora.Views
                     await DisplayAlert("Aviso", "No se puede guardar un horario vacío. Ingresa al menos un día trabajado.", "OK");
                     return;
                 }
+
+                //opcion usando funcionalidad de CommunityToolkit.Maui.Views
+                //    if (!tieneHorarios)
+                //    {
+                //        var popup = new Popup
+                //        {
+                //            Size = new Size(300, 150),
+                //            Content = new VerticalStackLayout
+                //            {
+                //                Padding = 20,
+                //                Children =
+                //{
+                //    new Label
+                //    {
+                //        Text = "No se puede guardar un horario vacío. Ingresa al menos un día trabajado.",
+                //        FontSize = 14,
+                //        HorizontalTextAlignment = TextAlignment.Center
+                //    },
+                //    new Button
+                //    {
+                //        Text = "Cerrar",
+                //        Command = new Command(() => Close())
+                //    }
+                //}
+                //            }
+                //        };
+
+                //        this.ShowPopup(popup);
+                //        return;
+                //    }
 
                 // Validar jornada semanal
                 if (horasTotales > _empleado.JornadaSemanal)

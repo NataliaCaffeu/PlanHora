@@ -46,6 +46,9 @@
 - HorariosPage: pagina donde de se selecionará el empleado para darle un horario. Hay un botón para exportar el horario del empleado seleccionado como PDF y asi se puede enviarlo por whatsapp. Un botón para acceder a HorarioFormPage.
 - HorarioFormPage: pagina donde se escribirá el horario del empleado, hace comprovaciones y exibe alertas. 
 
+## Videos demo del proyecto:
+
+- https://drive.google.com/drive/folders/1RWR1WoEPr_eGGwVQ6Q9b65xEcW_O6nn2?usp=drive_link
 
 ##  Diario de desarrollo 
 

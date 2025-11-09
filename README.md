@@ -85,6 +85,13 @@
  - [x] **08/11/2025** - Corregir y habilitar pantalla de registro y login.
  - [x] **08/11/2025** - Revisar errores y corregir bugs.
 
+### Fase 8 – Testing y entrega
+ - [x] **09/11/2025** - Modificación de icono con el logo de la aplicación.
+ - [x] **09/11/2025** - Testeo completo en emulador Android y en un dispositivo real.
+ - [x] **09/11/2025** - Revisar errores y corregir bugs.
+ - [x] **09/11/2025** - Grabacion de pantalla enseñando funcionamento de la aplicacion.
+ - [x] **09/11/2025** - Preparar el PDF final del proyecto.
+
 ## Problemas encontrados y soluciones
 
 ##### Fase 1 y 2:
@@ -148,7 +155,15 @@ Advertencias XAML de bindings (Binding could be compiled to improve runtime perf
 ##### Fase 6:
 - Error QuestPDF no pudo inicializarse en tiempo de ejecución. Causa investigada: QuestPDF depende de librerías de Windows Desktop (GDI, System.Drawing) que no existen en Android ni iOS. Por eso, aunque compile, al ejecutar en móvil falla.
 - **Solución:** No usar QuestPDF en Android/iOS, porque no es compatible. Usar una librería que funcione en MAUI Mobile, la que se esta utilizando es SkiaSharp y SkiaSharp.Views.Maui.Controls.Compatibility. 
-
+##### Fase 7:
+- Antes, al agregar o borrar empleados y locales, todos los datos de todos los usuarios aparecían en la app. No había separación por usuario.
+  - **Solución:** Se añadio la propiedad UsuarioId en Local y Empleado. Se actualizo los métodos de la DatabaseService para filtrar locales y empleados por el usuario actual: _local.UsuarioId = SessionService.UsuarioActual.Id; _empleado.UsuarioId = SessionService.UsuarioActual.Id;. Se actualizo los métodos GetLocalesPorUsuarioAsync y GetEmpleadosPorUsuarioAsync. Se modifico los SelectLocalPage y EmpleadoFormPage para que solo carguen los datos del usuario logueado.
+##### Fase 8:
+- Al intentar ejecutar la app en modo Release en un dispositivo Android real, aparecieron errores de AOT (Ahead-of-Time) relacionados con SkiaSharp.Views.Maui.Controls.Compatibility.dll y SkiaSharp.Views.Android.dll.
+  - **Solución:** Se confirmo que en modo Debug funciona correctamente. Esto indica que el problema estaba relacionado con el AOT en Release. Se decidio seguir probando en modo Debug, que permite ejecutar en el dispositivo sin precompilación AOT estricta.
+- Al cambiar el icono de la app por nuestro PNG (logoplanhorafinal.png) aparecieron errores como:resource mipmap/appicon not found
+  - **Solución:** Se sustituio el <MauiIcon> en el .csproj por el png con el logo de la aplicacion, se verifico el AndroidManifest.xml para asegurarnos de que no hubiera referencias antiguas a appicon, se reconstruio la solución y ya no aparecieron errores.
+    
 ### Pruebas realizadas
 
 - Verificación de instalación de .NET con `dotnet --info`  
@@ -156,6 +171,7 @@ Advertencias XAML de bindings (Binding could be compiled to improve runtime perf
 - Verificación de persistencia de locales y empleados: al añadir registros de prueba, estos permanecen al cerrar y reabrir la app.
 - Navegación básica funcionando: LoginPage → SelectLocalPage → EmpleadosPage.
 - Ejecución correcta en el emulador Android y en Windows.
+- Ejecución correcta en un dispositivo real.
 
 ### Otros aprendizajes y recursos
 
@@ -191,6 +207,11 @@ Advertencias XAML de bindings (Binding could be compiled to improve runtime perf
 ##### Fase 7:
 - Documentación oficial de .NET MAUI en Microsoft Learn
 - Herramientas de asistencia con IA (ChatGPT, GitHub Copilot)
+##### Fase 8:
+- Documentación oficial de .NET MAUI en Microsoft Learn
+- GitHub Issues de SkiaSharp
+- Microsoft Q&A y StackOverflow
+- Herramientas de asistencia con IA (ChatGPT, GitHub Copilot, Tabnine)
   
 ##  Consideraciones y aprendizajes
 
@@ -232,6 +253,17 @@ Buscando una solución compatible con MAUI, se optó por SkiaSharp, lo que permi
 También se aprendió a manejar correctamente la ubicación de los archivos usando FileSystem.CacheDirectory, asegurando que los PDFs se puedan compartir sin necesidad de permisos de almacenamiento adicionales.
 ##### Por qué se utilizo SkiaSharp.Views.Maui.Controls.Compatibility
 SkiaSharp contiene solo la lógica de dibujo básica (clases SKCanvas, SKPaint, etc.), SkiaSharp.Views.Maui.Controls.Compatibility agrega adaptadores y bindings para que estas clases funcionen dentro de MAUI XAML y controles nativos, asegurando compatibilidad multiplataforma. Asi que Se añade SkiaSharp.Views.Maui.Controls.Compatibility para que se pueda dibujar el PDF correctamente en MAUI, evitando errores de inicialización de fuentes y gráficos en Android/iOS/Windows.
+
+### Fase 7
+Se añadio desde el inicio del desarrollo del proyecto, para facilitar la realizacion de pruebas, un boton el la pantalla de login para acceder la aplicacion sin hacer login. Con eso las funciones creadas para luego manejar los locales y empleados, como añadir y borrar locales, añadir y borrar empleados no llevaban en cuenta que pudiera haber mas de un usuario para utilizar la aplicacion. Para arreglar ese problema se añadio un sessionService y usuarioId.
+##### Por que añadir SessionService
+Introducir un SessionService para gestionar el usuario logueado simplifica el filtrado de locales, empleados y horarios.
+##### Por que añadir UsuarioId
+Al asociar cada registro con un UsuarioId, se evita mostrar datos de otros usuarios, mejorando la seguridad y coherencia de la app.
+Ademas se tomo como lecion que la lógica de sesión y filtrado de datos por usuario es fundamental para apps multiusuario, asi que planificarla desde el inicio evita problemas de mezcla de datos en el futuro.
+
+### Fase 8
+Al intentar ejecutar la aplicacion en un dispositivo real aparecian problemas por haber elegido el modo de release ya que SkiaSharp.Views.Maui.Controls.Compatibility presentó problemas de precompilación. Al pesquisar sobre el tema se descubrio que no todos los paquetes NuGet funcionan automáticamente en AOT/Release para Android. La solucion encontrada para poder ejecutarlo en un dispositivo real fue probar la aplicación en modo Debug primero ya que el modo Release puede fallar por AOT. La leccion que se saca de eso es que se debe siempre conocer cómo forzar versiones compatibles de paquetes y revisar dependencias es crítico para evitar errores de compilación en Release.
 
 ---
 

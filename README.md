@@ -3,7 +3,7 @@
 **PlanHora** es una aplicación móvil desarrollada en .NET MAUI, orientada a la gestión de turnos y horarios de empleados, pensada inicialmente para negocios de hostelería, pero adaptable a cualquier sector que requiera planificación horaria semanal del personal.
 
 
-## Funcionalidades previstas
+## Funcionalidades 
 
 - Gestión de locales.  
 - Gestión de empleados.  
@@ -12,7 +12,6 @@
 - Alertas por exceso de jornada laboral.  
 - Almacenamiento local en SQLite.  
 - Exportación de horarios en PDF / Email.  
-- Consulta de festivos.  
 
 
 ##  Tecnologías utilizadas
@@ -20,7 +19,9 @@
 - **.NET MAUI** (multi-plataforma: Android, iOS, Windows)  
 - **SQLite** para persistencia de datos  
 - **MVVM** como patrón de arquitectura  
-- **Visual Studio 2022**  
+- **Visual Studio 2022** entorno de desarrollo
+- **.NET MAUI Community Toolkit** para mejora de UX
+- **SkiaSharp** para general los PDFs
 - **GitHub** para control de versiones  
 
 
@@ -29,17 +30,24 @@
 - `Views/` → Pantallas (UI).  
 - `ViewModels/` → Lógica de presentación (MVVM).  
 - `Models/` → Entidades (Empleado, Local, Horario, Festivo).  
-- `Services/` → Servicios (acceso a datos, SQLite, etc).  
+- `Services/` → Servicios (acceso a datos, SQLite, etc).
+- `Converters/` → Dar formato a informacion de horario
 
 
-### Funcionalidades funcionando actualmente
+### Pantallas funcionales
 
-- LoginPage: navegación a SelectLocalPage.
-- SelectLocalPage: agregar locales de prueba, visualizar la lista y persistencia correcta en SQLite.
-- EmpleadosPage: lista de empleados con botón de prueba para agregar empleados; persistencia funcionando.
+- RegisterPage: pagina de registro de usuarios
+- LoginPage: pagina de acceso de usuarios y navegación a SelectLocalPage.
+- SelectLocalPage: agregar y borrar locales y acceder a empleados. Acceso a LocalFormPage y EmpleadosPage.
+- LocalFormaPage: pagina para agregar locales a la lista.
+- EmpleadosPage: lista de empleados con botón de prueba para agregar empleados y borrar empleados.
+- EmpleadosFormPage: formulario para llenar los datos de los empleados para añadilos a la lista de los locales.
+- EmpleadosDeletePage: maneja la lista de empleados para borrar un empleado.
+- HorariosPage: pagina donde de se selecionará el empleado para darle un horario. Hay un botón para exportar el horario del empleado seleccionado como PDF y asi se puede enviarlo por whatsapp. Un botón para acceder a HorarioFormPage.
+- HorarioFormPage: pagina donde se escribirá el horario del empleado, hace comprovaciones y exibe alertas. 
 
 
-##  Diario de desarrollo / Estado actual 
+##  Diario de desarrollo 
 
 ### Fase 1  – Preparación del entorno y base del proyecto
 - [x] **19/08/2025** – Creación del repositorio en GitHub  
